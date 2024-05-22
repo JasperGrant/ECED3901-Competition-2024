@@ -11,8 +11,10 @@ from rclpy.node import Node
 from std_msgs.msg import Empty
 from geometry_msgs.msg import Pose
 
+# Class to act as a team's robot
 class TestStudent(Node):
 
+	# Constructor using number entered in console
 	def __init__(self, team_number):
 		super().__init__(f"test_student_{team_number}")
 		self.publisher_ = self.create_publisher(Pose, f"team_{team_number}_pose", 10)
@@ -25,9 +27,11 @@ class TestStudent(Node):
 			10
 		)
 		self.start = False
-		
+	
+	# Publish pose (you can do this at any rate you want)
 	def timer_callback(self):
 	
+		# If start has not been received
 		if  not self.start:
 			return
 	
@@ -47,6 +51,7 @@ class TestStudent(Node):
 		# Publish pose message
 		self.publisher_.publish(msg)
 		
+	# Receive empty start message and flip on switch
 	def start_callback(self, msg):
 		self.start = True
 		
@@ -68,12 +73,16 @@ def main():
 		return -3
 
 			
+	# Init ros2
 	rclpy.init()
 	
+	# Create class instance
 	test_student = TestStudent(team_number)
 	
+	# Spin continously
 	rclpy.spin(test_student)
 	
+	# Gracefully kill
 	test_student.destroy_node()
 	rclpy.shutdown()
 		
