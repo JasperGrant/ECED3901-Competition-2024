@@ -31,6 +31,7 @@ The problem with this remapping is that you will remap your CompetitionStart and
 publisher = node.create_publisher(Pose, '/team_1_cool_namespace/secret_pose', 10)
 ```
 
+**There is also a way to do this with remappings that I have not yet looked into. If someone figures this out please make an MR to update this readme and I will accept and add you as a contributor to this repo.**
 
 ## Pose Convention
 
