@@ -13,6 +13,17 @@ This package contains three python files:
  
  The final competition will require each team to interface with both of these pose_listener and competition_publisher nodes to ensure simultaneous competition start and constantly monitor the pose of both robots.
 
+## Installation
+
+To use this package, clone the repository into your ROS2 workspace and colcon build the package. The package should be on the same directory level as your eced3901 package.
+
+```bash
+cd /ros2_ws/src
+git clone https://github.com/JasperGrant/ECED3901-Competition-2024
+cd ..
+colcon build
+```
+
 
 ## Namespaces
 
