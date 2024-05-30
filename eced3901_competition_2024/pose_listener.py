@@ -30,12 +30,13 @@ class PoseListener(Node):
 		
 	# Callback for team 1's pose updates
 	def team_1_callback(self, msg):
-		print(f"Team 1 position: {msg.position.x},{msg.position.y},{msg.position.z}, orientation: {msg.orientation.x},{msg.orientation.y},{msg.orientation.z},{msg.orientation.w}\n")
+		self.get_logger().info(f"Team 1 position: {msg.position.x},{msg.position.y},{msg.position.z}, orientation: {msg.orientation.x},{msg.orientation.y},{msg.orientation.z},{msg.orientation.w}\n")
 		
 	# Callback for team 2's pose updates
 	def team_2_callback(self, msg):
 		# This will be flipped in the actual competition but is taken as is now.
-		print(f"Team 2 position: {msg.position.x},{msg.position.y},{msg.position.z}, orientation: {msg.orientation.x},{msg.orientation.y},{msg.orientation.z},{msg.orientation.w}\nThis will be flipped in the actual competition but is taken as is now.\n")
+		self.get_logger().info(f"Team 2 position: {msg.position.x},{msg.position.y},{msg.position.z}, orientation: {msg.orientation.x},{msg.orientation.y},{msg.orientation.z},{msg.orientation.w}\n")
+
 		
 def main():
 	# Init ros2

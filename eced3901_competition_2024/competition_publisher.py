@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# Script to publish continuosly to the CompetitionStart topic
+# Script to publish continuously to the CompetitionStart topic
 # Written by Jasper Grant
 
 import rclpy

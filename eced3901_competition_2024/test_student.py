@@ -18,6 +18,7 @@ class TestStudent(Node):
 	def __init__(self, team_number):
 		super().__init__(f"test_student_{team_number}")
 		self.publisher_ = self.create_publisher(Pose, f"team_{team_number}_pose", 10)
+		self.other_publishers = self.create_publisher(Empty, "other_robot_stuff", 10)
 		timer_period = 0.5
 		self.timer = self.create_timer(timer_period, self.timer_callback)
 		self.competition_start_subscription = self.create_subscription(
@@ -58,9 +59,9 @@ class TestStudent(Node):
 	 
 		
 def main():
-
+	print("Arguments:" + sys.argv[1])
 	# Handle user input of arguments
-	if len(sys.argv) != 2:
+	if len(sys.argv) < 2:
 		print("Do not forget to give a team number argument, 1 or 2!\n")
 		return -1
 	try:
