@@ -1,6 +1,8 @@
 # ECED3901 Competition 2024
 A ROS2 package to be used to connect both teams to the UI in the ECED3901 2024 competition
 
+![image](img/competition_diagram.png)
+
 ## Description
 
 This package contains three python files:
@@ -121,5 +123,6 @@ An example below shows both test_student robots running at the same time:
 
 **NOTE:** Make sure that your robot can easily be changed from team 1 to team 2 by changing the topic it publishes to. This will be required for the final competition. A good way to do this is as an argument for the program or launch file of 1 or 2.
 
+## FAQ
 
-
+No questions have been asked yet. Once I get questions I will add them here.
