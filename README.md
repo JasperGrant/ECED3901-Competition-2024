@@ -125,4 +125,5 @@ An example below shows both test_student robots running at the same time:
 
 ## FAQ
 
-No questions have been asked yet. Once I get questions I will add them here.
+**Q: I am changing my code but the changes are not showing up?**
+A: Delete the build and install folders in /ros2_ws and rebuild the package. Either your executables will be built from the newest version or they will fail to build and you can see the error messages.
