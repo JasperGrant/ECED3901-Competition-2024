@@ -11,7 +11,6 @@ def generate_launch_description():
 			namespace='namespace_team_15',
 			executable='test_student_with_switch',
 			name='team_15_robot',
-			arguments='2',
 			remappings=[
 				('/namespace_team_15/team_2_pose', '/team_2_pose'),
 				('/namespace_team_15/team_1_pose', '/team_1_pose'),
