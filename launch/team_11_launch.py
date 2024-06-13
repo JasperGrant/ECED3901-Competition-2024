@@ -11,7 +11,6 @@ def generate_launch_description():
 			namespace='team_11_namespace',
 			executable='test_student',
 			name='team_11_robot',
-			arguments='1',
 			remappings=[
 				('/team_11_namespace/team_1_pose', '/team_1_pose'),
 				('/team_11_namespace/team_2_pose', '/team_2_pose'),
@@ -20,6 +19,14 @@ def generate_launch_description():
 				('/team_11_namespace/team_2_ready', '/team_2_ready')
 				
 			],
+			output='screen'
+		),
+		
+		Node(
+			package='dalmotor',
+			namespace='team_11_namespace',
+			executable='dalmotor',
+			name='team_11_motor',
 			output='screen'
 		)
 	])

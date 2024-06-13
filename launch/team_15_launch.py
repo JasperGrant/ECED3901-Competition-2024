@@ -20,6 +20,13 @@ def generate_launch_description():
 				('/namespace_team_15/team_2_ready', '/team_2_ready')
 			],
 			output='screen'
+		),
+		Node(
+			package='dalmotor',
+			namespace='namespace_team_15',
+			executable='dalmotor',
+			name='team_15_motor',
+			output='screen'
 		)
 	])
 
