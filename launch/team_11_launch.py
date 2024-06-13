@@ -9,7 +9,7 @@ def generate_launch_description():
 		Node(
 			package='eced3901_competition_2024',
 			namespace='team_11_namespace',
-			executable='test_student',
+			executable='test_student_with_switch',
 			name='team_11_robot',
 			remappings=[
 				('/team_11_namespace/team_1_pose', '/team_1_pose'),
