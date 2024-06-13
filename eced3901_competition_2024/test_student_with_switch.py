@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 
-# Script to demonstrate how a single robot team should behave in competition
+# Script to demonstrate how a single robot team should behave in competition, 
+# This version includes a physical switch to tell the difference between team 1 and team 2
 # Written by Jasper Grant
 
 import sys
 
+import serial
 import rclpy
 from rclpy.node import Node
 
@@ -34,12 +36,11 @@ class TestStudent(Node):
 	
 	# Publish pose (you can do this at any rate you want)
 	def timer_callback(self):
-
+	
 		ready_msg = Int32()
 		ready_msg.data = example_group_number
-
 		self.ready_publisher.publish(ready_msg)
-
+	
 		# If start has not been received
 		if  not self.start:
 			return
@@ -67,25 +68,18 @@ class TestStudent(Node):
 	 
 		
 def main():
-	print("Arguments:" + sys.argv[1])
-	# Handle user input of arguments
-	if len(sys.argv) < 2:
-		print("Do not forget to give a team number argument, 1 or 2!\n")
-		return -1
-	try:
-		team_number = int(sys.argv[1])
-	except: 
-		print("Ensure your team number is an integer!\n")
-		return -2
-	if int(team_number) not in [1,2]:
-		print("Team number must be either 1 or 2!\n")
-		return -3
+	# No arguments handled any more
 	
-	# This is done so that team 1 and 2 test students will send different numbers to the ready topics.
-	# In reality each team can hardcode their own number in their own code.
+	# Initiate serial
+	ser = serial.Serial(
+			port='/dev/ttyUSB0',
+			baudrate=9600)
+			
+	team_number = chr(ser.read()[-1])
+	
+	
 	global example_group_number
-	example_group_number = 11 if team_number == 1 else 15
-
+	example_group_number = 11 if team_number == '1' else 15
 			
 	# Init ros2
 	rclpy.init()

@@ -26,6 +26,7 @@ setup(
                 'competition_publisher = eced3901_competition_2024.competition_publisher:main',
                 'pose_listener = eced3901_competition_2024.pose_listener:main',
                 'test_student = eced3901_competition_2024.test_student:main',
+                'test_student_with_switch = eced3901_competition_2024.test_student_with_switch:main',
         ],
 },
 )
