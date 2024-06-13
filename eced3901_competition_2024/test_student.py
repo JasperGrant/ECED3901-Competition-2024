@@ -8,8 +8,10 @@ import sys
 import rclpy
 from rclpy.node import Node
 
-from std_msgs.msg import Empty
+from std_msgs.msg import Empty, Int32
 from geometry_msgs.msg import Pose
+
+example_group_number = 0
 
 # Class to act as a team's robot
 class TestStudent(Node):
@@ -19,6 +21,7 @@ class TestStudent(Node):
 		super().__init__(f"test_student_{team_number}")
 		self.publisher_ = self.create_publisher(Pose, f"team_{team_number}_pose", 10)
 		self.other_publishers = self.create_publisher(Empty, "other_robot_stuff", 10)
+		self.ready_publisher = self.create_subscription(Int32, f"team_{team_number}_ready", 10)
 		timer_period = 0.5
 		self.timer = self.create_timer(timer_period, self.timer_callback)
 		self.competition_start_subscription = self.create_subscription(
@@ -31,7 +34,12 @@ class TestStudent(Node):
 	
 	# Publish pose (you can do this at any rate you want)
 	def timer_callback(self):
-	
+
+		ready_msg = Int32()
+		ready_msg.data = example_group_number
+
+		self.ready_publisher.publish(ready_msg)
+
 		# If start has not been received
 		if  not self.start:
 			return
@@ -72,6 +80,11 @@ def main():
 	if int(team_number) not in [1,2]:
 		print("Team number must be either 1 or 2!\n")
 		return -3
+	
+	# This is done so that team 1 and 2 test students will send different numbers to the ready topics.
+	# In reality each team can hardcode their own number in their own code.
+	global example_group_number
+	example_group_number = 11 if team_number == 1 else 15
 
 			
 	# Init ros2

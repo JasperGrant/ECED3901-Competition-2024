@@ -29,7 +29,7 @@ colcon build
 
 ## Namespaces
 
-To avoid topic collision, each team must have all of their topics outside of /CompetitionStart and /team_1_pose or /team_2_pose inside their own namespace. The naming convention is not strict as long as it has your team number in it. This is left intentionally vague so that a team cannot just publish malicious data to every other team number's namespaces.
+To avoid topic collision, each team must have all of their topics outside of /CompetitionStart, /team_1_pose or /team_2_pose, and /team_1_ready or /team_2_ready inside their own namespace. The naming convention is not strict as long as it has your team number in it. This is left intentionally vague so that a team cannot just publish malicious data to every other team number's namespaces.
 
 An example of how to set a namespace for your nodes is shown below:
 
@@ -51,6 +51,7 @@ Node(
 	remappings=[
 		('/namespace_team_15/team_2_pose', '/team_2_pose'),
 		('/namespace_team_15/CompetitionStart', '/CompetitionStart')
+		('/namespace_team_15/team_2_ready', '/team_2_ready')
 	],
 	output='screen'
 )
@@ -60,7 +61,7 @@ If everything is working correctly your ros2 topic list should look like the fol
 
 ![image](img/remap_example.png)
 
-Notice the lack of /CompetitionStart, /team_1_pose, and /team_2_pose topics in the namespace. Only their global versions are shown. Every other topic from each robot is in their respective namespace.
+Notice the lack of /CompetitionStart, /team_1_pose, or /team_2_pose, and /team_1_ready or /team_2_ready topics in the namespace. Only their global versions are shown. Every other topic from each robot is in their respective namespace.
 
 To see this for yourself run the demo.launch.py file included in this repo.
 
