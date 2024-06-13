@@ -11,7 +11,7 @@ import rclpy
 from rclpy.node import Node
 
 from std_msgs.msg import Empty, Int32
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, Twist
 
 example_group_number = 0
 
@@ -24,6 +24,7 @@ class TestStudent(Node):
 		self.publisher_ = self.create_publisher(Pose, f"team_{team_number}_pose", 10)
 		self.other_publishers = self.create_publisher(Empty, "other_robot_stuff", 10)
 		self.ready_publisher = self.create_publisher(Int32, f"team_{team_number}_ready", 10)
+		self.vel_pub = self.create_publisher(Twist, "cmd_vel", 10)
 		timer_period = 0.5
 		self.timer = self.create_timer(timer_period, self.timer_callback)
 		self.competition_start_subscription = self.create_subscription(
@@ -60,6 +61,10 @@ class TestStudent(Node):
 		
 		# Publish pose message
 		self.publisher_.publish(msg)
+		
+		vel_msg = Twist()
+		vel_msg.linear.x = 1.0
+		self.vel_pub.publish(vel_msg)
 		
 	# Receive empty start message and flip on switch
 	def start_callback(self, msg):
