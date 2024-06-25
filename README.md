@@ -3,6 +3,16 @@ A ROS2 package to be used to connect both teams to the UI in the ECED3901 2024 c
 
 ![image](img/competition_diagram.png)
 
+## Competition Integration Overview
+
+Each team will be required to conform to the following standards to interface with the competition nodes.
+
+1. A physical switch on the robot must be used to switch between team 1 and team 2.
+2. The robot must publish it's team number in the form of an std_msgs/Int32 at 2Hz to the topic '/team_x_ready' where x is team 1 or team 2.
+3. The robot must continuously publish it's pose in the form of a geometry_msgs/Pose at 2Hz to the topic '/team_x_pose' where x is team 1 or team 2.
+4. The robot must subscribe to the topic '/CompetitionStart' and start the competition when it receives an empty message on this topic. This topic will continue to be published with empty messages at 2Hz.
+5. All other topics must be within the team's namespace to avoid topic collision.
+
 ## Description
 
 This package contains three python files:
@@ -11,10 +21,8 @@ This package contains three python files:
  
  - **competition_publisher:** Once the competition is started this node will continuously publish empty messages to '/CompetitionStart'
  
- - **test_student:** This node demonstrates what your robot should be doing to interact with these nodes.
+ - **test_student:** This node demonstrates what your robot should be doing to interact with the competition nodes.
  
- The final competition will require each team to interface with both of these pose_listener and competition_publisher nodes to ensure simultaneous competition start and constantly monitor the pose of both robots.
-
 ## Installation
 
 To use this package, clone the repository into your ROS2 workspace and colcon build the package. The package should be on the same directory level as your eced3901 package.
@@ -57,11 +65,7 @@ Node(
 )
 ```
 
-If everything is working correctly your ros2 topic list should look like the following:
-
-![image](img/remap_example.png)
-
-Notice the lack of /CompetitionStart, /team_1_pose, or /team_2_pose, and /team_1_ready or /team_2_ready topics in the namespace. Only their global versions are shown. Every other topic from each robot is in their respective namespace.
+If everything is working correctly you should notice the lack of /CompetitionStart, /team_1_pose, or /team_2_pose, and /team_1_ready or /team_2_ready topics in the namespace. Only their global versions are shown. Every other topic from each robot is in their respective namespace.
 
 To see this for yourself run the demo.launch.py file included in this repo.
 
@@ -79,7 +83,6 @@ While the orientation member of the pose message is typically a quaternion, we w
 ![image](img/map.png)
 
 
-
 ## Testing
 
 ### Communication with Competition Nodes
@@ -94,9 +97,7 @@ ros2 run eced3901_competition_2024 pose_listener
 
 You should not see any output.
 
-2. Start your robot node. The robot node should publish its pose to the topic '/team_1_pose' or '/team_2_pose' depending on your team number.
-
-The test_student node can be used to simulate the robot node. To start the test_student node, run the following command:
+1. Start your robot node.
 
 ```bash
 ros2 run eced3901_competition_2024 test_student 1
@@ -108,9 +109,11 @@ ros2 run eced3901_competition_2024 test_student 1
 ros2 run eced3901_competition_2024 test_student 2
 ```
 
+The robot node should publish it's team number to the topic '/team_1_ready' or '/team_2_ready'.
+
 You should still not see any output from the pose_listener node.
 
-3. Start the competition_publisher node by running the following command:
+1. Start the competition_publisher node by running the following command:
 
 ```bash
 ros2 run eced3901_competition_2024 competition_publisher
@@ -118,11 +121,12 @@ ros2 run eced3901_competition_2024 competition_publisher
 
 You should see the pose of your robot being printed to the console by the pose_listener node.
 
+You should now see the robot publishing it's pose to the topic '/team_1_pose' or '/team_2_pose' and it's team number to the topic '/team_1_ready' or '/team_2_ready'.
+The competition_publisher node should be publishing empty messages to the topic '/CompetitionStart'.
+
 An example below shows both test_student robots running at the same time:
 
 ![image](img/test_example.png)
-
-**NOTE:** Make sure that your robot can easily be changed from team 1 to team 2 by changing the topic it publishes to. This will be required for the final competition. A good way to do this is as an argument for the program or launch file of 1 or 2.
 
 ## FAQ
 

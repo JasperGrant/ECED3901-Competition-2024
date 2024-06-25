@@ -9,10 +9,10 @@ void setup() {
 
 void loop() {
   if(digitalRead(SW_PIN) == LOW){
-    Serial.print(1);
+    Serial.print("1\n");
   }
   else{
-    Serial.print(0);
+    Serial.print("2\n");
   }
   delay(1000);
 
