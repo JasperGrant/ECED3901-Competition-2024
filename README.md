@@ -134,10 +134,10 @@ An example below shows both test_student robots running at the same time:
 A: Delete the build and install folders in /ros2_ws and rebuild the package. Either your executables will be built from the newest version or they will fail to build and you can see the error messages.
 
 **Q: How am I going to interface with the Arduino?**
-A: Example files are provided in the competition directory; basic arduino code can be found in the arduino subdirectory, and a python script that deals with the switch input coming from the arduino is detailed in test_student_with_switch.py from the eced3901_competition_2024 directory. 
+A: Example files are provided in the competition repo; basic arduino code can be found in the arduino subdirectory, and a python script that deals with the switch input coming from the arduino is detailed in test_student_with_switch.py from the eced3901_competition_2024 directory. 
 
 **Q: How can I identify which COM Port the Arduino is connected to?**
-A: Open a new terminal. Type "cd /dev", then "ls". A large list of files should appear. You should look for a file named ttyUSBX, where X is the number on the USB that your Arduino is attached to. 
+A: Open a new terminal. Type "cd /dev", then "ls". A large list of files should appear. You should look for a file named ttyUSBX or ttyACMX, where X is a number associated with the port for serial connection that your Arduino is attached using. 
 
 **Q: Are the namespaces that our competition specific launch files contained in going to be uniquely named, or do we have to change them to team_x_launch?**
-A: Aside from competition_start, team_x_ready, and team_pose (which will be remapped to a general namespace), your namespace should be completely unique to you. 
+A: Aside from /CompetitionStart, /team_x_ready, and /team_x_pose (which will be remapped to the global namespace), your namespace should be completely unique to you. 
