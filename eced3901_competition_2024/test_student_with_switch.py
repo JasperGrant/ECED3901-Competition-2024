@@ -21,7 +21,7 @@ class TestStudent(Node):
 	# Constructor using number entered in console
 	def __init__(self, team_number):
 		super().__init__(f"test_student_{team_number}")
-		self.publisher_ = self.create_publisher(Pose, f"team_{team_number}_pose", 10)
+		self.publisher_ = self.create_publisher(Pose, f"team_{team_number}_pose", 10) # fstring lets you format a string in its statement
 		self.other_publishers = self.create_publisher(Empty, "other_robot_stuff", 10)
 		self.ready_publisher = self.create_publisher(Int32, f"team_{team_number}_ready", 10)
 		self.vel_pub = self.create_publisher(Twist, "cmd_vel", 10)
@@ -77,19 +77,19 @@ def main():
 	
 	# Initiate serial
 	ser = serial.Serial(
-			port='/dev/ttyUSB0',
+			port='/dev/ttyUSB0', # USB number could change depending on what port you're connected to.
 			baudrate=9600)
 			
 	team_number = chr(ser.read()[-1])
 	
-	
+	# Swap example group number with your group number (and remove the IF statement) when ready
 	global example_group_number
-	example_group_number = 11 if team_number == '1' else 15
+	example_group_number = 11 if team_number == '1' else 15 
 			
 	# Init ros2
 	rclpy.init()
 	
-	# Create class instance
+	# Create class instance; stuff in init of the class runs. 
 	test_student = TestStudent(team_number)
 	
 	# Spin continously

@@ -8,7 +8,7 @@ A ROS2 package to be used to connect both teams to the UI in the ECED3901 2024 c
 Each team will be required to conform to the following standards to interface with the competition nodes.
 
 1. A physical switch on the robot must be used to switch between team 1 and team 2.
-2. The robot must publish it's team number in the form of an std_msgs/Int32 at 2Hz to the topic '/team_x_ready' where x is team 1 or team 2.
+2. The robot must publish it's team number, n, in the form of an std_msgs/Int32 at 2Hz to the topic '/team_x_ready' where x is team 1 or team 2. n is your design team's number. You will publish to it when your robot is ready to begin the competition. 
 3. The robot must continuously publish it's pose in the form of a geometry_msgs/Pose at 2Hz to the topic '/team_x_pose' where x is team 1 or team 2.
 4. The robot must subscribe to the topic '/CompetitionStart' and start the competition when it receives an empty message on this topic. This topic will continue to be published with empty messages at 2Hz.
 5. All other topics must be within the team's namespace to avoid topic collision.
@@ -132,3 +132,12 @@ An example below shows both test_student robots running at the same time:
 
 **Q: I am changing my code but the changes are not showing up?**
 A: Delete the build and install folders in /ros2_ws and rebuild the package. Either your executables will be built from the newest version or they will fail to build and you can see the error messages.
+
+**Q: How am I going to interface with the Arduino?**
+A: Example files are provided in the competition repo; basic arduino code can be found in the arduino subdirectory, and a python script that deals with the switch input coming from the arduino is detailed in test_student_with_switch.py from the eced3901_competition_2024 directory. 
+
+**Q: How can I identify which COM Port the Arduino is connected to?**
+A: Open a new terminal. Type "cd /dev", then "ls". A large list of files should appear. You should look for a file named ttyUSBX or ttyACMX, where X is a number associated with the port for serial connection that your Arduino is attached using. 
+
+**Q: Are the namespaces that our competition specific launch files contained in going to be uniquely named, or do we have to change them to team_x_launch?**
+A: Aside from /CompetitionStart, /team_x_ready, and /team_x_pose (which will be remapped to the global namespace), your namespace should be completely unique to you. 
