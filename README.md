@@ -8,20 +8,24 @@ A ROS2 package to be used to connect both teams to the UI in the ECED3901 2024 c
 Each team will be required to conform to the following standards to interface with the competition nodes.
 
 1. A physical switch on the robot must be used to switch between team 1 and team 2.
-2. The robot must publish it's team number, n, in the form of an std_msgs/Int32 at 2Hz to the topic '/team_x_ready' where x is team 1 or team 2. n is your design team's number. You will publish to it when your robot is ready to begin the competition. 
-3. The robot must continuously publish it's pose in the form of a geometry_msgs/Pose at 2Hz to the topic '/team_x_pose' where x is team 1 or team 2.
-4. The robot must subscribe to the topic '/CompetitionStart' and start the competition when it receives an empty message on this topic. This topic will continue to be published with empty messages at 2Hz.
-5. All other topics must be within the team's namespace to avoid topic collision.
+2. Either the same or a second switch must be used to switch between the "green" 80Hz team 1 and the "blue" 40Hz team 2.
+3. The robot must publish it's team number, n, in the form of an std_msgs/Int32 at 2Hz to the topic '/team_x_ready' where x is team 1 or team 2. n is your design team's number. You will publish to it when your robot is ready to begin the competition. 
+4. The robot must continuously publish it's pose in the form of a geometry_msgs/Pose at 2Hz to the topic '/team_x_pose' where x is team 1 or team 2.
+5. The robot must subscribe to the topic '/CompetitionStart' and start the competition when it receives an empty message on this topic. This topic will continue to be published with empty messages at 2Hz.
+6. All other topics must be within the team's namespace to avoid topic collision.
+7. ROS_DOMAIN_ID must be set to 0. This will allow your topics and nodes to be seen by the competition nodes. 
 
 ## Description
 
-This package contains three python files:
+This package contains the follwoing code:
 
  - **pose_listener:** This node should subscribe to your team's robot pose as '/team_1_pose' or '/team_2_pose' and print to console whenever it receives a message.
  
  - **competition_publisher:** Once the competition is started this node will continuously publish empty messages to '/CompetitionStart'
  
  - **test_student:** This node demonstrates what your robot should be doing to interact with the competition nodes.
+ - **test_student_with_switch:** This node demonstrates how to decided team 1 or 2 based on a switch input from an Arduino. This is a more advanced version of test_student that you can use to test your robot with a switch input. This can also be done in C++ but I find serial is easier in python.
+ - **switch_sketch.ino:** This very simple Arduino sketch sends a 1 over serial if pin 12 is shorted to GND and a 2 if pin 12 is floating. This is used in test_student_with_switch.py to determine which team the robot is on.
  
 ## Installation
 
@@ -68,6 +72,49 @@ Node(
 If everything is working correctly you should notice the lack of /CompetitionStart, /team_1_pose, or /team_2_pose, and /team_1_ready or /team_2_ready topics in the namespace. Only their global versions are shown. Every other topic from each robot is in their respective namespace.
 
 To see this for yourself run the demo.launch.py file included in this repo.
+
+## Systemd Service
+
+Systemd allows you to run your launch file as a service. This is useful for running your robot code on boot. Example service files are included in the services directory.
+
+Once your service file is created you must:
+
+1. Copy the service file to /etc/systemd/system
+
+```bash
+sudo cp /path/to/your/service/file /etc/systemd/system
+```
+
+2. Reload the systemd daemon
+
+```bash	
+sudo systemctl daemon-reload
+```
+
+3. Enable the service to run on boot
+
+```bash
+sudo systemctl enable your_service_name.service
+```
+
+4. Start the service to test
+
+```bash
+sudo systemctl start your_service_name.service
+```
+service ROS2 nodes run on ROS_DOMAIN_ID=0 which is the same as competition nodes. This means that you can run your robot code as a service and it will be able to communicate with the competition nodes.
+
+The next time you boot your robot it will run the enabled service.
+
+To troublshoot run:
+
+```bash
+journalctl -f
+```
+
+This displays all output from services.
+
+The following link is the source of my information on systemd services: https://wiki.arcoslab.org/tutorials/starting_ros2_nodes_with_systemd
 
 ## Pose Convention
 
@@ -129,6 +176,9 @@ An example below shows both test_student robots running at the same time:
 ![image](img/test_example.png)
 
 ## FAQ
+
+**Q: I am seeing topics and nodes that are not mine?**
+Ensure that your ROS_DOMAIN_ID is set to your team number. This will prevent you from seeing other team's topics and nodes.
 
 **Q: I am changing my code but the changes are not showing up?**
 A: Delete the build and install folders in /ros2_ws and rebuild the package. Either your executables will be built from the newest version or they will fail to build and you can see the error messages.

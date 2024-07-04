@@ -77,7 +77,7 @@ def main():
 	
 	# Initiate serial
 	ser = serial.Serial(
-			port='/dev/ttyUSB0', # USB number could change depending on what port you're connected to.
+			port='/dev/ttyUSB0', # USB number could change depending on what port the USB is plugged into. DOUBLE CHECK THIS
 			baudrate=9600)
 			
 	team_number = chr(ser.read()[-1])
