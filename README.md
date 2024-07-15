@@ -3,6 +3,12 @@ A ROS2 package to be used to connect both teams to the UI in the ECED3901 2024 c
 
 ![image](img/competition_diagram.png)
 
+## A Note on Namespaces
+
+
+Due to difficulties getting nav2, rviz, dalmotor, and ylidar mapped to namespaces, the competition integration setup has been changed to use ROS_DOMAIN_ID to separate the two teams. This means that each team will have their own ROS_DOMAIN_ID and will not be able to see the other team's topics and nodes. This unfortunately removes the possibility of spying on another teams's pose topic but means all your topics can be in the global namespace. Apart from the loss of namespaces no changes must be made to the competition setup. Each team will still publish and subscribe to the global topics in the same way. To make this work the third competition overseer computer will run an instance of the competition nodes for each team. This will allow the competition nodes to see both teams' topics and nodes. For the sake of previously done work the team 1/2 switch and topic requirements are still in place.
+ 
+
 ## Competition Integration Overview
 
 Each team will be required to conform to the following standards to interface with the competition nodes.
@@ -12,12 +18,13 @@ Each team will be required to conform to the following standards to interface wi
 3. The robot must publish it's team number, n, in the form of an std_msgs/Int32 at 2Hz to the topic '/team_x_ready' where x is team 1 or team 2. n is your design team's number. You will publish to it when your robot is ready to begin the competition. 
 4. The robot must continuously publish it's pose in the form of a geometry_msgs/Pose at 2Hz to the topic '/team_x_pose' where x is team 1 or team 2.
 5. The robot must subscribe to the topic '/CompetitionStart' and start the competition when it receives an empty message on this topic. This topic will continue to be published with empty messages at 2Hz.
-6. All other topics must be within the team's namespace to avoid topic collision.
-7. ROS_DOMAIN_ID must be set to 0. This will allow your topics and nodes to be seen by the competition nodes. 
+**Changed:**
+6. ROS_DOMAIN_ID must be set to your design team number. This will allow your topics and nodes to be seen by the competition nodes.
+7. Your SystemD service must be set to run on your team's ROS_DOMAIN_ID. An example of syntax for this can be found in services/example.service.
 
 ## Description
 
-This package contains the follwoing code:
+This package contains the following code:
 
  - **pose_listener:** This node should subscribe to your team's robot pose as '/team_1_pose' or '/team_2_pose' and print to console whenever it receives a message.
  
@@ -38,41 +45,6 @@ cd ..
 colcon build
 ```
 
-
-## Namespaces
-
-To avoid topic collision, each team must have all of their topics outside of /CompetitionStart, /team_1_pose or /team_2_pose, and /team_1_ready or /team_2_ready inside their own namespace. The naming convention is not strict as long as it has your team number in it. This is left intentionally vague so that a team cannot just publish malicious data to every other team number's namespaces.
-
-An example of how to set a namespace for your nodes is shown below:
-
-```bash
-
-ros2 run my_package my_executable --ros-args --remap --namespace=/team_1_cool_namespace
-```
-
-The problem with using a namespace this way is that you will remap your CompetitionStart and pose topics to the /team_1_cool_namespace namespace. To avoid this you can remap these nodes in your namespace to the global ones. This is best done in a launch file. An example of how to do this is shown below:
-
-
-```python
-Node(
-	package='eced3901_competition_2024',
-    namespace='namespace_team_15',
-	executable='test_student',
-	name='team_15_robot',
-	arguments='2',
-	remappings=[
-		('/namespace_team_15/team_2_pose', '/team_2_pose'),
-		('/namespace_team_15/CompetitionStart', '/CompetitionStart')
-		('/namespace_team_15/team_2_ready', '/team_2_ready')
-	],
-	output='screen'
-)
-```
-
-If everything is working correctly you should notice the lack of /CompetitionStart, /team_1_pose, or /team_2_pose, and /team_1_ready or /team_2_ready topics in the namespace. Only their global versions are shown. Every other topic from each robot is in their respective namespace.
-
-To see this for yourself run the demo.launch.py file included in this repo.
-
 ## Systemd Service
 
 Systemd allows you to run your launch file as a service. This is useful for running your robot code on boot. Example service files are included in the services directory.
@@ -82,7 +54,7 @@ Once your service file is created you must:
 1. Copy the service file to /etc/systemd/system
 
 ```bash
-sudo cp /path/to/your/service/file /etc/systemd/system
+sudo cp /path/to/your/service/file /etc/systemd/system/your_service_name.service
 ```
 
 2. Reload the systemd daemon
@@ -102,7 +74,7 @@ sudo systemctl enable your_service_name.service
 ```bash
 sudo systemctl start your_service_name.service
 ```
-service ROS2 nodes run on ROS_DOMAIN_ID=0 which is the same as competition nodes. This means that you can run your robot code as a service and it will be able to communicate with the competition nodes.
+service ROS2 nodes must run on ROS_DOMAIN_ID=design team number.
 
 The next time you boot your robot it will run the enabled service.
 
@@ -188,6 +160,3 @@ A: Example files are provided in the competition repo; basic arduino code can be
 
 **Q: How can I identify which COM Port the Arduino is connected to?**
 A: Open a new terminal. Type "cd /dev", then "ls". A large list of files should appear. You should look for a file named ttyUSBX or ttyACMX, where X is a number associated with the port for serial connection that your Arduino is attached using. 
-
-**Q: Are the namespaces that our competition specific launch files contained in going to be uniquely named, or do we have to change them to team_x_launch?**
-A: Aside from /CompetitionStart, /team_x_ready, and /team_x_pose (which will be remapped to the global namespace), your namespace should be completely unique to you. 
