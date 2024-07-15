@@ -4,7 +4,7 @@ Description=ROS2 robot startup
 
 [Service]
 User=student
-ExecStart=/bin/bash -c 'source /opt/ros/humble/setup.bash; source ~/motor_ws/install/setup.bash; source ~/ydlidar_ros2_ws/install/setup.bash; source ~/imu_ws/install/setup.sh; source ~/ros2_ws/install/setup.bash; ros2 launch eced3901_competition_2024 team_11_launch.py'
+ExecStart=/bin/bash -c 'source /opt/ros/humble/setup.bash; source ~/motor_ws/install/setup.bash; source ~/ydlidar_ros2_ws/install/setup.bash; source ~/imu_ws/install/setup.sh; source ~/ros2_ws/install/setup.bash; ROS_DOMAIN_ID=11 ros2 launch eced3901_competition_2024 team_11_launch.py'
 RemainAfterExit=no
 Restart=on-failure
 RestartSec=2s
