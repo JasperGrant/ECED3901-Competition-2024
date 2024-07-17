@@ -64,9 +64,9 @@ class PoseListener(Node):
 
 		data = {
 			"team": 2,
-			"x": msg.position.x,
-			"y": msg.position.y,
-			"theta": msg.orientation.z,
+			"x": 193.5 - msg.position.x,
+			"y": 145.0 - msg.position.y,
+			"theta": msg.orientation.z + 3.14159,
 		}
 		sock.sendto(str(data).encode(), (udp_ip, udp_port))
 
