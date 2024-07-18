@@ -21,7 +21,7 @@ ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_1 ros2 run eced3901_competition_2024 pose_listen
 ```bash
 ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_2 ros2 run eced3901_competition_2024 pose_listener
 ```
-4. Start an instance of the competition publisher on the overseert computer on each domain with a single command
+4. Start an instance of the competition publisher on the overseer computer on each domain with a single command
 ```bash
 ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_1 ros2 run eced3901_competition_2024 competition_publisher && ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_2 ros2 run eced3901_competition_2024 competition_publisher
 ```
