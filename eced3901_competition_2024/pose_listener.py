@@ -10,7 +10,7 @@ import socket
 
 from geometry_msgs.msg import Pose
 
-udp_ip = "10.0.0.230"
+udp_ip = "10.0.0.2"
 udp_port = 9090
 
 # Class to print to console every pose update
