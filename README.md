@@ -3,6 +3,30 @@ A ROS2 package to be used to connect both teams to the UI in the ECED3901 2024 c
 
 ![image](img/competition_diagram.png)
 
+# Running the Competition
+
+1. Place both robots on the course and ensure they are powered on. They will each be on a ROS_DOMAIN_ID of their team number. Ideally systemD services will be used to start the robot nodes on boot.
+2. Echo ready topics on either domain
+```bash
+ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_1 ros2 topic echo /team_1_ready
+```
+```bash
+ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_2 ros2 topic echo /team_2_ready
+```
+Make sure that GROUP_NUMBER_TEAM_1 and GROUP_NUMBER_TEAM_2 are replaced with the actual group numbers of the teams. You should see the team numbers being published at 2Hz.
+3. Start the pose listeners on both domains
+```bash
+ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_1 ros2 run eced3901_competition_2024 pose_listener
+```
+```bash
+ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_2 ros2 run eced3901_competition_2024 pose_listener
+```
+4. Start an instance of the competition publisher on the overseert computer on each domain with a single command
+```bash
+ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_1 ros2 run eced3901_competition_2024 competition_publisher && ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_2 ros2 run eced3901_competition_2024 competition_publisher
+```
+5. When both robots have finished the competition close all terminals and repeat the process for the next round.
+
 ## A Note on Namespaces
 
 
