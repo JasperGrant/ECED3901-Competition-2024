@@ -23,7 +23,7 @@ ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_2 ros2 run eced3901_competition_2024 pose_listen
 ```
 4. Start an instance of the competition publisher on the overseer computer on each domain with a single command
 ```bash
-ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_1 ros2 run eced3901_competition_2024 competition_publisher && ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_2 ros2 run eced3901_competition_2024 competition_publisher
+ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_1 ros2 run eced3901_competition_2024 competition_publisher & ROS_DOMAIN_ID=GROUP_NUMBER_TEAM_2 ros2 run eced3901_competition_2024 competition_publisher
 ```
 5. When both robots have finished the competition close all terminals and repeat the process for the next round.
 
